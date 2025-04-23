@@ -1,0 +1,187 @@
+{% extends 'main/base.html' %}
+{% load main_extras %}
+
+{% block title %}Resume | {{ profile.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="resume-header mb-5 text-center">
+        <h1 class="display-4 fw-bold mb-3" style="color: var(--primary-color);">
+            {{ profile.user.get_full_name }}
+        </h1>
+        <div class="contact-info text-muted mb-4">
+            <span><i class="fas fa-envelope me-2"></i>{{ profile.user.email }}</span>
+            {% if profile.linkedin_url %}
+                <span class="mx-3">|</span>
+                <a href="{{ profile.linkedin_url }}" target="_blank" class="text-decoration-none" style="color: inherit;">
+                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                </a>
+            {% endif %}
+            {% if profile.github_url %}
+                <span class="mx-3">|</span>
+                <a href="{{ profile.github_url }}" target="_blank" class="text-decoration-none" style="color: inherit;">
+                    <i class="fab fa-github me-2"></i>GitHub
+                </a>
+            {% endif %}
+        </div>
+        {% if profile.resume_file %}
+            <a href="{{ profile.resume_file.url }}" class="btn btn-primary" download>
+                <i class="fas fa-download me-2"></i>Download PDF Resume
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Professional Summary -->
+    {% if profile.bio %}
+    <section class="mb-5">
+        <h2 class="section-title">Professional Summary</h2>
+        <div class="card">
+            <div class="card-body">
+                {{ profile.bio|safe }}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Skills -->
+    {% if skills %}
+    <section class="mb-5">
+        <h2 class="section-title">Skills</h2>
+        {% regroup skills by get_category_display as skill_list %}
+        {% for category in skill_list %}
+            <div class="mb-4">
+                <h3 class="h5 mb-3">{{ category.grouper }}</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            {% for skill in category.list %}
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span>{{ skill.name }}</span>
+                                                <small class="text-muted">{{ skill.proficiency }}/5</small>
+                                            </div>
+                                            <div class="progress" style="height: 6px;">
+                                                <div class="progress-bar" role="progressbar" 
+                                                     style="width: {{ skill.proficiency|multiply:20 }}%; background-color: var(--accent-color);"
+                                                     aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="5">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    <!-- Work Experience -->
+    {% if experiences %}
+    <section class="mb-5">
+        <h2 class="section-title">Work Experience</h2>
+        {% for exp in experiences %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h3 class="h5 mb-1">{{ exp.title }}</h3>
+                            <div class="text-muted">{{ exp.company }}</div>
+                        </div>
+                        <div class="text-end text-muted">
+                            <div>{{ exp.location }}</div>
+                            <div>
+                                {{ exp.start_date|date:"M Y" }} - 
+                                {% if exp.end_date %}
+                                    {{ exp.end_date|date:"M Y" }}
+                                {% else %}
+                                    Present
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-description">
+                        {{ exp.description|safe }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+    <!-- Education -->
+    {% if education %}
+    <section>
+        <h2 class="section-title">Education</h2>
+        {% for edu in education %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h3 class="h5 mb-1">{{ edu.degree }} in {{ edu.field_of_study }}</h3>
+                            <div class="text-muted">{{ edu.institution }}</div>
+                        </div>
+                        <div class="text-end text-muted">
+                            {{ edu.start_date|date:"M Y" }} - 
+                            {% if edu.end_date %}
+                                {{ edu.end_date|date:"M Y" }}
+                            {% else %}
+                                Present
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if edu.description %}
+                        <div class="education-description">
+                            {{ edu.description|safe }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .resume-header {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    @media print {
+        .navbar, .footer, .btn-primary {
+            display: none !important;
+        }
+        
+        body {
+            font-size: 12pt;
+        }
+        
+        .card {
+            box-shadow: none;
+            border: 1px solid #dee2e6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    }
+</style>
+{% endblock %} 

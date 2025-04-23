@@ -1,0 +1,93 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ post.title }} | Blog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="blog-post">
+        {% if post.image %}
+            <div class="featured-image mb-4">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid rounded shadow">
+            </div>
+        {% endif %}
+        
+        <header class="mb-4">
+            <h1 class="display-4 fw-bold" style="color: var(--primary-color);">{{ post.title }}</h1>
+            <div class="meta text-muted">
+                <i class="far fa-calendar-alt me-1"></i> {{ post.created_at|date:"F j, Y" }}
+                <span class="mx-2">•</span>
+                <i class="far fa-user me-1"></i> {{ post.author.get_full_name }}
+                {% if post.updated_at != post.created_at %}
+                    <span class="mx-2">•</span>
+                    <i class="far fa-clock me-1"></i> Updated on {{ post.updated_at|date:"F j, Y" }}
+                {% endif %}
+            </div>
+        </header>
+        
+        <div class="content">
+            {{ post.content|safe }}
+        </div>
+        
+        <footer class="mt-5">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'main:blog_list' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Blog
+                </a>
+                <div class="share-buttons">
+                    <span class="me-2">Share:</span>
+                    <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri }}"
+                       target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}"
+                       target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </article>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .blog-post {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .blog-post .content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .blog-post .content img {
+        max-width: 100%;
+        height: auto;
+        margin: 2rem 0;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .blog-post .content pre {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+    }
+
+    .blog-post .content blockquote {
+        border-left: 4px solid var(--accent-color);
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .blog-post .content pre {
+            background-color: #2d2d2d;
+        }
+    }
+</style>
+{% endblock %} 

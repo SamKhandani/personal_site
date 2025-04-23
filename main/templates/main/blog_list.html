@@ -1,0 +1,93 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Blog | {{ profile.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="section-title">Blog Posts</h2>
+    
+    <div class="row g-4">
+        {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}"
+                             style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="h5 card-title">{{ post.title }}</h3>
+                        <p class="text-muted small mb-2">
+                            <i class="far fa-calendar-alt me-1"></i> {{ post.created_at|date:"F j, Y" }}
+                            <span class="mx-2">•</span>
+                            <i class="far fa-user me-1"></i> {{ post.author.get_full_name }}
+                        </p>
+                        <div class="card-text mb-3">{{ post.content|safe|truncatewords_html:30 }}</div>
+                        <a href="{% url 'main:blog_detail' post.slug %}" class="btn btn-primary">
+                            Read More <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No blog posts available yet. Check back soon!
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-img-top {
+        border-bottom: 3px solid var(--accent-color);
+    }
+
+    .page-link {
+        color: var(--accent-color);
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: white;
+    }
+</style>
+{% endblock %} 

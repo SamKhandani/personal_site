@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Projects | {{ profile.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="section-title">My Projects</h2>
+    
+    <div class="row g-4">
+        {% for project in projects %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}"
+                             style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="h5 card-title">{{ project.title }}</h3>
+                        <div class="card-text mb-3">{{ project.description|safe|truncatewords_html:30 }}</div>
+                        <div class="d-flex gap-2 flex-wrap mb-3">
+                            {% for tech in project.technologies_used.all %}
+                                <span class="badge" style="background-color: var(--accent-color);">{{ tech.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex gap-2">
+                            {% if project.live_url %}
+                                <a href="{{ project.live_url }}" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-external-link-alt me-1"></i> Live Demo
+                                </a>
+                            {% endif %}
+                            {% if project.github_url %}
+                                <a href="{{ project.github_url }}" target="_blank" class="btn btn-outline-primary">
+                                    <i class="fab fa-github me-1"></i> Code
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No projects available yet. Check back soon!
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .badge {
+        padding: 0.5em 1em;
+        border-radius: 20px;
+    }
+
+    .card-img-top {
+        border-bottom: 3px solid var(--accent-color);
+    }
+</style>
+{% endblock %} 

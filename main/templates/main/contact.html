@@ -1,0 +1,66 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contact | {{ profile.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="section-title text-center">Get in Touch</h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <p class="lead">
+                            Have a question or want to work together? Feel free to reach out!
+                        </p>
+                        <div class="contact-info mb-4">
+                            {% if profile.linkedin_url %}
+                                <a href="{{ profile.linkedin_url }}" target="_blank" class="me-3" style="color: var(--accent-color);">
+                                    <i class="fab fa-linkedin fa-2x"></i>
+                                </a>
+                            {% endif %}
+                            {% if profile.github_url %}
+                                <a href="{{ profile.github_url }}" target="_blank" class="me-3" style="color: var(--accent-color);">
+                                    <i class="fab fa-github fa-2x"></i>
+                                </a>
+                            {% endif %}
+                            {% if profile.twitter_url %}
+                                <a href="{{ profile.twitter_url }}" target="_blank" class="me-3" style="color: var(--accent-color);">
+                                    <i class="fab fa-twitter fa-2x"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-info a:hover {
+        color: var(--primary-color) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    .contact-info a {
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %} 
