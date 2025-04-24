@@ -1,0 +1,13 @@
+{
+  "name": "personal-site-samkhandani",
+  "version": "1.0.0",
+  "description": "Personal site for Sam Khandani",
+  "main": "index.js",
+  "scripts": {
+    "build": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
+    "start": "python manage.py runserver"
+  },
+  "dependencies": {
+    "@netlify/plugin-nextjs": "^4.39.3"
+  }
+} 
