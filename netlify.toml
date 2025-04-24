@@ -1,10 +1,11 @@
 [build]
-  command = "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+  command = "docker build -t personal-site . && docker run -e PORT=$PORT -e SECRET_KEY=$SECRET_KEY -e DEBUG=$DEBUG -e ALLOWED_HOSTS=$ALLOWED_HOSTS -e DATABASE_URL=$DATABASE_URL -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE personal-site"
   publish = "staticfiles"
 
 [build.environment]
   PYTHON_VERSION = "3.9.6"
   DJANGO_SETTINGS_MODULE = "config.settings_production"
+  NODE_VERSION = "16"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
