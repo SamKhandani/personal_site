@@ -1,10 +1,14 @@
 from .settings import *
 import os
 import dj_database_url
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Security settings
-DEBUG = False
-ALLOWED_HOSTS = ['your-site.vercel.app', 'localhost']  # Replace 'your-site.vercel.app' with your actual domain
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'your-site.vercel.app,localhost').split(',')
 
 # Database
 DATABASES = {
