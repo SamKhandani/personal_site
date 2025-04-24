@@ -4,7 +4,7 @@ import dj_database_url
 
 # Security settings
 DEBUG = False
-ALLOWED_HOSTS = ['*']  # Replace with your actual domain
+ALLOWED_HOSTS = ['your-site.vercel.app', 'localhost']  # Replace 'your-site.vercel.app' with your actual domain
 
 # Database
 DATABASES = {
