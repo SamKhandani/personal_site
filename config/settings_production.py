@@ -7,10 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Security settings
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'your-site.vercel.app,localhost').split(',')
-
-# Database
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
