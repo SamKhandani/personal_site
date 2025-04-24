@@ -45,4 +45,8 @@ venv.bak/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Netlify
+.netlify/
+node_modules/ 
