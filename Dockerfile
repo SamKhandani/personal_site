@@ -16,11 +16,21 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+# Create and set permissions for database directory
+RUN mkdir -p /var/www \
+    && chown -R www-data:www-data /var/www
+
 # Copy project files
 COPY . .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Make scripts executable
+RUN chmod +x scripts/create_superuser_and_push.sh
+
+# Run migrations and create superuser
+RUN ./scripts/create_superuser_and_push.sh
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
