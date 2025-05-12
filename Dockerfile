@@ -26,11 +26,9 @@ COPY . .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make scripts executable
-RUN chmod +x scripts/create_superuser_and_push.sh
-
-# Run migrations and create superuser
-RUN ./scripts/create_superuser_and_push.sh
+# Run migrations
+RUN python manage.py makemigrations \
+    && python manage.py migrate
 
 # Collect static files
 RUN python manage.py collectstatic --noinput

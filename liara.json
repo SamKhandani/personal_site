@@ -1,0 +1,8 @@
+{
+    "volumes": [
+        {
+            "path": "/var/www",
+            "name": "database-volume"
+        }
+    ]
+} 
